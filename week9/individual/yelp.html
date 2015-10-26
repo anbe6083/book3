@@ -79,43 +79,161 @@ function solution1(){
 
 function solution2(){
     // TODO: use the Internet to lookup the GPS coordinates
-    var c0 = {latitude: 39.823, longitude: 105.43}   // Denver
-    var c1 = {latitude: 38.234, longitude: 102.33}   // Boulder
+    var c0 = {latitude: 39.739236, longitude: -104.990251
+}   // Denver
+    var c1 = {latitude: 40.014986, longitude: -105.270546
+}   // Boulder
     return geolib.getDistance(c0,c1)/1000 + ' km'
 }
 
 function solution3(){
     var businessesInGilbert = _.filter(items, {city: 'Gilbert'})
-    // TODO: find McDonloads and compute the distance between the first two
-    return 'TODO'
+
+    var mcdonaldsInGilbert = _.filter(businessesInGilbert, {name: "McDonald's"})
+    var mickeyD1 = {latitude:mcdonaldsInGilbert[0].latitude, longitude:mcdonaldsInGilbert[0].longitude}
+    var mickeyD2 = {latitude:mcdonaldsInGilbert[1].latitude, longitude:mcdonaldsInGilbert[1].longitude}
+   // console.log("mickeyD1: ", mickeyD1)
+    //console.log('businessesInGilbert: ',mcdonaldsInGilbert)
+
+    return geolib.getDistance(mickeyD1, mickeyD2)/1000+ ' km'
 }
 
 function solution4(){
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var mcdonaldsInPheonix = _.filter(businessesInPheonix, {name: "McDonald's"})
     return 'TODO'
 }
 
 function solution5(){
-    return 'TODO'
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var mcdonaldsInPheonix = _.filter(businessesInPheonix, {name: "McDonald's"})
+    //console.log("mcdonaldsInPheonix.length", mcdonaldsInPheonix.length)
+    var starbucksInPheonix = _.filter(businessesInPheonix, {name: "Starbucks"})
+    //console.log("starbucksInPheonix: ", starbucksInPheonix.length)
+    if(starbucksInPheonix.length > mcdonaldsInPheonix.length){
+        return 'Starbucks'
+    }
+    else{
+        return 'McDonalds'
+    }
 }
 
 function solution6(){
-    return 'TODO'
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var starbucksInPheonix = _.filter(businessesInPheonix, {name: "Starbucks"})
+    //console.log("starbucksInPheonix", starbucksInPheonix)
+    var maxReviews = _.max(starbucksInPheonix, function(d){
+        return d.review_count
+    })
+    //console.log("maxReviews", maxReviews)
+    return maxReviews.full_address
 }
 
 function solution7(){
-    return 'TODO'
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var starbucksInPheonix = _.filter(businessesInPheonix, {name: "Starbucks"})
+    //console.log("starbucksInPheonix", starbucksInPheonix)
+    var maxReviews = _.max(starbucksInPheonix, function(d){
+        return d.review_count
+    })
+    var maxReviewsCoords = {latitude: maxReviews.latitude, longitude: maxReviews.longitude}
+    var mcdonaldsInPheonix = _.filter(businessesInPheonix, {name: "McDonald's"})
+
+   // console.log("mcdonaldsInPheonix", mcdonaldsInPheonix)
+    var mcdonaldsCoords = _.pick(mcdonaldsInPheonix, function(d){
+            var lat = d.latitude
+            var longitude = d.longitude
+            return lat, longitude
+    })
+    //console.log('mcdonaldsCoords', mcdonaldsCoords)
+   // console.log("geolib.findNearest(maxReviewsCoords, mcdonaldsCoords, 1)", geolib.findNearest(maxReviewsCoords, mcdonaldsCoords, 1))
+    var nearest = geolib.findNearest(maxReviewsCoords, mcdonaldsCoords, 1)
+    console.log('nearest', nearest)
+
+    var finaladdress = _.find(mcdonaldsCoords, {latitude:nearest.latitude, longitude: nearest.longitude}, 'full_address')
+    console.log('finaladdress', finaladdress)
+    return finaladdress.full_address
 }
 
 function solution8(){
-    return 'TODO'
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var starbucksInPheonix = _.filter(businessesInPheonix, {name: "Starbucks"})
+    //console.log("starbucksInPheonix", starbucksInPheonix)
+    var maxReviews = _.max(starbucksInPheonix, function(d){
+        return d.review_count
+    })
+    var maxReviewsCoords = {latitude: maxReviews.latitude, longitude: maxReviews.longitude}
+    var mcdonaldsInPheonix = _.filter(businessesInPheonix, {name: "McDonald's"})
+
+   // console.log("mcdonaldsInPheonix", mcdonaldsInPheonix)
+    var mcdonaldsCoords = _.pick(mcdonaldsInPheonix, function(d){
+            var lat = d.latitude
+            var longitude = d.longitude
+            return lat, longitude
+    })
+    //console.log('mcdonaldsCoords', mcdonaldsCoords)
+   // console.log("geolib.findNearest(maxReviewsCoords, mcdonaldsCoords, 1)", geolib.findNearest(maxReviewsCoords, mcdonaldsCoords, 1))
+    var nearest = geolib.findNearest(maxReviewsCoords, mcdonaldsCoords, 1)
+    console.log('nearest', nearest)
+
+    var finaladdress = _.find(mcdonaldsCoords, {latitude:nearest.latitude, longitude: nearest.longitude}, 'full_address')
+    console.log('nearest', nearest)
+    var mickyLat = nearest.latitude
+    console.log("nearest['latitude']", nearest['latitude'])
+    var mickylong = nearest.longitude
+    console.log('nearest.longitude', nearest.longitude)
+    var coffeeShops = _.filter(businessesInPheonix, {'categories': ["Coffee & Tea"]})
+    console.log('coffeeShops', coffeeShops)
+    counter = 0
+    _.forEach(coffeeShops, function(d){
+        var lat = d.latitude
+        console.log('lat', lat)
+        var longitude1 = d.longitude
+        console.log('longitude1', longitude1)
+        if(geolib.isPointInCircle(
+    {latitude: mickyLat, longitude: mickylong}, 
+    {latitude: lat, longitude: longitude1}, 
+    2000)){
+            counter++
+        }
+    })
+    return counter
 }
 
 function solution9(){
-    return 'TODO'
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var mcdonaldsInPheonix = _.filter(businessesInPheonix, {name: "McDonald's"})
+
+    var maxLatitude = _.max(mcdonaldsInPheonix, function(d){
+            return d.latitude
+
+    })
+   // console.log('maxLatitude', maxLatitude)
+    var minLatitude = _.min(mcdonaldsInPheonix, function(d){
+        return d.latitude
+    })
+   // console.log('minLatitude', minLatitude)
+    return 'Furthest McDonalds north is: ' +maxLatitude.full_address +', Furthest McDonalds south is: ' +minLatitude.full_address
 }
 
 function solution10(){
-    return 'TODO'
+    var businessesInPheonix = _.filter(items, {city: 'Phoenix'})
+    var starbucksInPheonix = _.filter(businessesInPheonix, {name: "Starbucks"})
+    var mcdonaldsInPheonix = _.filter(businessesInPheonix, {name: "McDonald's"})
+    var addresses = ''
+    _.forEach(mcdonaldsInPheonix, function(mickeyD){
+        _.forEach(starbucksInPheonix, function(starbucks){
+            if(!geolib.isPointInCircle(
+    {latitude: mickeyD.latitude, longitude: mickeyD.longitude}, 
+    {latitude: starbucks.latitude, longitude: starbucks.longitude}, 
+    5000)){
+                console.log(mickeyD)
+                return addresses += mickeyD.full_address+'\n'
+            }
+        })
+    })
+    console.log('addresses', addresses)
+    return addresses
 }
 
 function run(id, solutionFunc, data){
