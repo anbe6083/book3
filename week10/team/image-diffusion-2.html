@@ -73,7 +73,7 @@
           </section>
 
           <section id="q6" class="question collection-item">
-              <h4>question? (contributed by ???)</h4>
+              <h4>Were more images tweeted & retweeted in the morning or evening (AM/PM)? (Caleb Hsu)</h4>
               <div class="answer"></div>
           </section>
       </div>
@@ -90,9 +90,20 @@
   <div class="section white container flow-text">
     <div class="markdown">
 
+# Discussion Stuff Here
+ <div class="section white container flow-text">
+    <div class="markdown">
+
 # Discussion
 
-Discuss some findings
+According to our analysis, it appears that the majority of tweets collected in this dataset were tweeted in the morning (before 12:00PM Nepali Standard Time). This makes sense because although the earthquake itself occurred around noon, images likely did not begin circulating until the extend of the damage was evident and people had gone to safety. It would be interesting to see if image-less tweets were higher in volume near the actual time of the earthquake. 
+
+The three users that posted images closest to the actual time of the earthquake were agastya_kh, im_pritam3, and rmcroshan, and the users that created the most original image tweets were news agencies. Additionally, a number of the most retweeted images were originally created by users with a higher number of followers (with a few exceptions), so it is probable that these were the official twitters of various news agencies.
+
+In terms of more specific difference in tweets, it appears the frequency of retweets in Hindi were 12% higher than retweets in Nepali, although this is also based off of a smaller sampling size of Hindi tweets (which likewise makes sense due to the demographics of Nepal). As with many natural disasters, Twitter accounts are created specifically for the purpose of retweeting news of the quake, as was the case with _prayfornepal_, which created no original retweets.
+
+    </div>
+  </div>
 
 # Heading 2
 
@@ -265,7 +276,15 @@ function solution5(){
 }
 
 function solution6(){
-    return 'TODO'
+        var filterAM = _.filter(items, function(d){
+      return _.includes(d["* Tweet Created At"], 'AM')
+    }).length
+
+    var filterPM = _.filter(items, function(d){
+      return _.includes(d["* Tweet Created At"], 'PM')
+    }).length
+
+    return filterAM + " images were tweeted in the morning while " + filterPM + " images were tweeted in the evening."
 }
 
 function run(id, solutionFunc, data){
