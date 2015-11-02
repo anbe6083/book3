@@ -12,7 +12,7 @@
 
 <div class="container">
 
-    <h1>Where should we build X?</h1>
+    <h1>Where should we build a hip coffee shop?</h1>
 
     <section id="candidates" class="question">
         <h4>Where are the candidate locations?</h4>
@@ -52,29 +52,78 @@ function getCandidateLocations(){
 // Scoring Functions
 //
 
-function has_some_feature_1(loc){
-  // TODO
-  return true
+function whereIsThereAConcentrationOfBusinesses(loc){
+  //A good place for a coffee shops is where there are a large amount of shops,    >=20 businesses
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return geolib.convertUnit('mi', d) < 1
+  })
+
+  return nearbyBusinesses.length >= 20
 }
 
-function has_some_feature_2(loc){
-  // TODO
-  return false
+function whereAreThereOtherCoffeeShops(loc){
+  //A good location would be where coffee shops aren't concentrated, with less than 5 coffee shops within 1 mile
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return geolib.convertUnit('mi', d) < 1
+  })
+  console.log('nearbyBusinesses', nearbyBusinesses)
+  var filterCoffee = _.filter(nearbyBusinesses, function(d){
+    if(_.includes(d['categories'], 'Coffee & Tea')){
+      return d
+    }
+  })
+  console.log('filterCoffee', filterCoffee)
+  return filterCoffee.length <= 5
 }
 
-function has_some_feature_3(loc){
-  // TODO
-  return true
+function isThereAMallNearby(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return geolib.convertUnit('mi', d) < .5
+  })
+
+  var findMalls = _.filter(nearbyBusinesses, function(d, i){
+    if(d.name.match(/\sMall/)){
+      return d
+    }
+  })
+  console.log('findMalls', findMalls)
+  return findMalls
 }
 
-function has_some_feature_4(loc){
-  // TODO
-  return false
+function areThereSchoolsNearby(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return geolib.convertUnit('mi', d) < 1
+  })
+
+  var schools = _.filter(nearbyBusinesses, function(d){
+    if(_.includes(d['categories'], 'Colleges & Universities') || _.includes(d['categories'], 'Education') || _.includes(d['categories'], 'Middle Schools & High Schools') || d.name.match(/School/) || d.name.match(/University/) || d.name.match(/College/)){
+        return d
+    }
+  })
+  console.log('schools', schools)
+  return schools.length >=1
 }
 
-function has_some_feature_5(loc){
-  // TODO
-  return false
+function isThereAPoliceStationNearby(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+    var loc2  = _.pick(item, ['latitude', 'longitude'])
+    var d = geolib.getDistance(loc, loc2)
+    return geolib.convertUnit('mi', d) < 3
+  })
+
+  var policeStations = _.filter(nearbyBusinesses, function(d){
+    return _.includes(d['categories'], 'Police Departments')
+  })
+  console.log('policeStations', policeStations)
+  return policeStations
 }
 
 //
@@ -168,18 +217,18 @@ function loadDataThenRunSolutions(){
 
       // take only the last 2000 to speed up computation
       // TODO: comment this out before the final submission
-      items = _.takeRight(items, 2000)
+      //items = _.takeRight(items, 2000)
 
       console.log('number of items loaded:', items.length)
       console.log('first item:', items[0])
 
       console.log('scoring all candidate locations')
 
-      scoreAndVisualize(locs, has_some_feature_1, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_2, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_3, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_4, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_5, visualize_true_or_false)
+      scoreAndVisualize(locs, whereIsThereAConcentrationOfBusinesses, visualize_true_or_false)
+      scoreAndVisualize(locs, whereAreThereOtherCoffeeShops, visualize_true_or_false)
+      scoreAndVisualize(locs, isThereAMallNearby, visualize_true_or_false)
+      scoreAndVisualize(locs, areThereSchoolsNearby, visualize_true_or_false)
+      scoreAndVisualize(locs, isThereAPoliceStationNearby, visualize_true_or_false)
 
    })
    .fail(function(err){
