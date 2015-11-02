@@ -47,6 +47,24 @@ function getCandidateLocations(){
   return locations
 }
 
+function getCandidateLocationsUpDate(){
+  var locations = []
+  var m = 6
+  var n = 6
+  var lat = 33.45
+  var longit = -112.03
+  for(i = 0; i < m; i++){
+    longit = -112.03
+    for(j = 0; j < n; j++){
+      locations.push({latitude: lat, longitude: longit})
+      longit-=0.05
+    }
+    lat+=0.05
+  }
+  return locations
+
+}
+
 
 //
 // Scoring Functions
@@ -205,7 +223,7 @@ function visualize_true_or_false(domElement, locs, scores){
 var items = []
 function loadDataThenRunSolutions(){
 
-  var locs = getCandidateLocations()
+  var locs = getCandidateLocationsUpDate()
   visualize($('#candidates .map')[0], locs)
 
   $.get({url: 'http://bigdatahci2015.github.io/data/yelp/yelp_academic_dataset_business.phoenix.json.lines.txt'})
@@ -217,7 +235,7 @@ function loadDataThenRunSolutions(){
 
       // take only the last 2000 to speed up computation
       // TODO: comment this out before the final submission
-      //items = _.takeRight(items, 2000)
+      items = _.takeRight(items, 2000)
 
       console.log('number of items loaded:', items.length)
       console.log('first item:', items[0])
