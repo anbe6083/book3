@@ -8,10 +8,12 @@ layout: layout.hbs
 ## Learning
 
 * [Week 9](week9/)
+* [Week 10](week10/)
 
 ## Hackathons
 
 * [Business Location](hackathons/business-location)
+<<<<<<< HEAD
 
 ## Week 10
 
@@ -21,3 +23,6 @@ layout: layout.hbs
 ## Individual 
 
 * [Business Location](week10/individual)
+=======
+* [Twitter Events](hackathons/twitter)
+>>>>>>> upstream/master
