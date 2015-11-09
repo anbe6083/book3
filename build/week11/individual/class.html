@@ -38,7 +38,7 @@
     <div class="parallax">
       <img src="cloud.jpg">
       <h1 id="title">What is everyone in the class's activity?
-        <div class="authors">by Name</div>
+        <div class="authors">by Andrew Berumen</div>
       </h1>
     </div>
   </div>
@@ -68,7 +68,7 @@ new Firebase(CLASS_FORKS)
     _.forEach(forks, function(fork){
       var individual_github_name = fork.owner.login
       var individual_firebase_url = 'https://' + individual_github_name + '-bigdata-hci.firebaseio.com'
-      console.log('firebase url', individual_firebase_url)
+     // console.log('firebase url', individual_firebase_url)
 
       new Firebase(individual_firebase_url)
         .child('events')
@@ -97,7 +97,7 @@ function handle_individual_events(name, individual_events){
   // use the me of the
   class_events[name] = individual_events
 
-  console.log('loaded data from ' + _.values(class_events).length + ' individuals')
+ // console.log('loaded data from ' + _.values(class_events).length + ' individuals')
 
   analyze(class_events)
 }
@@ -121,14 +121,14 @@ function analyze(events){
 
   ask(how_many_individuals_analyzed_so_far, events)
   ask(whose_data_is_available, events)
-  ask(question1, events)
-  ask(question2, events)
-  ask(question3, events)
-  ask(question4, events)
-  ask(question5, events)
-  ask(question6, events)
-  ask(question7, events)
-  ask(question8, events)
+  ask(which_apps_do_people_use, events)
+  ask(how_many_peoples_data_is_not_available, events)
+  ask(what_was_the_max_number_of_Events_used, events)
+  ask(how_many_emails_were_recieved, events)
+  ask(how_many_instagrams_were_sent, events)
+  ask(how_many_events, events)
+  ask(how_many_github_events, events)
+  ask(how_many_used_instagram, events)
   ask(question9, events)
   ask(question10, events)
 }
@@ -141,36 +141,120 @@ function whose_data_is_available(events){
   return _.keys(events).join(' , ')
 }
 
-function question1(events){
-  return '...'
+function which_apps_do_people_use(events){
+  /*var chain = _.chain(events).values(events).map(function(d){
+    return _.keys(d)
+  })*/
+
+  var keys = _.mapKeys(events, function(d){
+    return _.keys(d)
+  })
+ // console.log('keys', keys)
+  return _.keys(keys)
+  }
+
+
+function how_many_peoples_data_is_not_available(events){
+  console.log('events', events)
+  //var array = _.values(events)
+  //console.log('array', array)
+  var filter = _.filter(events, function(d, i){
+    if(d == null){
+      return i
+    }
+  })
+  //console.log(_.keys(filter))
+  return filter.length
 }
 
-function question2(events){
-  return '...'
+function what_was_the_max_number_of_Events_used(events){
+  
+  var users = _.keys(events)
+  //console.log('users', users)
+  var userevents = _.values(events)
+  //console.log('userevents', userevents)
+  var map = _.mapValues(events, function(d){
+    return _.size(_.keys(d))
+  })
+ //console.log('map', map)
+  var max = _.max(userevents, function(d){
+    return _.values(d).length
+  })
+  //console.log('max', max)
+  return _.keys(max).length
+
+}
+function how_many_emails_were_recieved(events){
+  var mapValues = _.mapValues(events, function(d){
+    if(_.includes(_.keys(d), 'gmail')){
+      return _.size(d.gmail)
+    }
+    if(!_.includes(_.keys(d), 'gmail')){
+      return 0
+    }
+  })
+  console.log('mapValues', mapValues)
+
+  var map = _.map(mapValues, function(d, i){
+    return d
+  })
+
+  return map
+  
+  }
+
+function how_many_instagrams_were_sent(events){
+  var retrieveInsta = _.mapValues(events, function(d){
+    if(_.includes(_.keys(d), 'instagram')){
+      return _.size(d.instagram)
+    }
+    if(!_.includes(_.keys(d), 'instagram')){
+      return 0 
+    }
+
+  })
+  var map = _.map(retrieveInsta, function(d, i){
+    return d
+  })
+
+  return map
 }
 
-function question3(events){
-  return '...'
+function how_many_events(events){
+  var mapValues = _.mapKeys(events, function(d){
+    return _.size(_.values(d))
+  })
+  console.log('mapValues', mapValues)
+  return _.keys(mapValues)
 }
 
-function question4(events){
-  return '...'
+function how_many_github_events(events){
+  var retrieveGit = _.mapValues(events, function(d){
+    if(_.includes(_.keys(d), 'github')){
+      return _.size(d.instagram)
+    }
+    if(!_.includes(_.keys(d), 'github')){
+      return 0 
+    }
+
+  })
+  var map = _.map(retrieveGit, function(d, i){
+    return d
+  })
+
+  return map
 }
 
-function question5(events){
-  return '...'
-}
+function how_many_used_instagram(events){
+  var keys = []
+  var retrieveInsta = _.mapValues(events, function(d){
+    if(_.includes(_.keys(d), 'instagram')){
+      keys.push(_.keys(d[0]))
+    }
+  })
+  console.log(keys)
+  return keys.length
 
-function question6(events){
-  return '...'
-}
-
-function question7(events){
-  return '...'
-}
-
-function question8(events){
-  return '...'
 }
 
 function question9(events){
