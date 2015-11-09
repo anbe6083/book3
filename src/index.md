@@ -10,6 +10,7 @@ layout: layout.hbs
 * [Week 9](week9/)
 * [Week 10](week10/)
 * [Week 11](week11/individual)
+* [Week 12](week12/)
 
 ## Hackathons
 
@@ -26,4 +27,8 @@ layout: layout.hbs
 * [Business Location](week10/individual)
 
 * [Twitter Events](hackathons/twitter)
+<<<<<<< HEAD
 
+=======
+* [Bitcoin Trading](hackathons/bitcoin)
+>>>>>>> upstream/master
