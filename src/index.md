@@ -27,8 +27,7 @@ layout: layout.hbs
 * [Business Location](week10/individual)
 
 * [Twitter Events](hackathons/twitter)
-<<<<<<< HEAD
 
-=======
+
 * [Bitcoin Trading](hackathons/bitcoin)
->>>>>>> upstream/master
+
